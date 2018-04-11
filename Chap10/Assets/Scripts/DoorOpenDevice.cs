@@ -25,6 +25,7 @@ public class DoorOpenDevice : MonoBehaviour {
     {
         if (_open)
         {
+            soundSource.PlayOneShot(doorAudio);
             StartCoroutine(workDoor(startPos, dPos, duration));
         }
     }
@@ -33,6 +34,7 @@ public class DoorOpenDevice : MonoBehaviour {
     {
         if (!_open)
         {
+            soundSource.PlayOneShot(doorAudio);
             StartCoroutine(workDoor(dPos, startPos, duration));
         }
     }
@@ -41,10 +43,12 @@ public class DoorOpenDevice : MonoBehaviour {
     {
         if (_open)
         {
+            soundSource.PlayOneShot(doorAudio);
             StartCoroutine(workDoor(startPos, dPos, duration));
         } 
         else
         {
+            soundSource.PlayOneShot(doorAudio);
             StartCoroutine(workDoor(dPos, startPos, duration));
         }
 
@@ -52,7 +56,7 @@ public class DoorOpenDevice : MonoBehaviour {
 
     private IEnumerator workDoor(Vector3 start, Vector3 end, float duration)
     {
-        soundSource.PlayOneShot(doorAudio);
+       
         float elapsed = 0;
         while (elapsed <= duration)
         {

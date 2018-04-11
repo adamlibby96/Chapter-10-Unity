@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SettingsPopup : MonoBehaviour {
+
+    [SerializeField] private AudioClip clip;
+
     public void Open()
     {
         gameObject.SetActive(true);
@@ -16,6 +19,7 @@ public class SettingsPopup : MonoBehaviour {
     public void OnSoundToggle()
     {
         Managers.Audio.soundMute = !Managers.Audio.soundMute;
+        Managers.Audio.PlaySound(clip);
     }
 
     public void OnSoundValue(float volume)
