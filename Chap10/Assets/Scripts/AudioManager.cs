@@ -5,8 +5,8 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour, IGameManager {
 
     [SerializeField] private AudioSource soundSource;
-    [SerializeField] private AudioSource ambientSound;
-    [SerializeField] private AudioSource ambientSound2;
+    [SerializeField] private AudioSource music1Source;
+    [SerializeField] private AudioSource music2Source;
     [SerializeField] private string ambientSoundName;
     [SerializeField] private string ambientSoundName2;
 
@@ -28,10 +28,10 @@ public class AudioManager : MonoBehaviour, IGameManager {
         set
         {
             _musicVolume = value;
-            if (ambientSound != null && !_corssFading)
+            if (music1Source != null && !_corssFading)
             {
-                ambientSound.volume = _musicVolume;
-                ambientSound2.volume = _musicVolume;
+                music1Source.volume = _musicVolume;
+                music2Source.volume = _musicVolume;
             }
         }
     }
@@ -39,27 +39,29 @@ public class AudioManager : MonoBehaviour, IGameManager {
     {
         get
         {
-            if (ambientSound != null)
+            if (music1Source != null)
             {
-                return ambientSound.mute;
+                return music1Source.mute;
             }
             return false;
         }
         set
         {
-            if (ambientSound != null)
+            if (music1Source != null)
             {
-                ambientSound.mute = value;
-                ambientSound2.mute = value;
+                music1Source.mute = value;
+                music2Source.mute = value;
             }
         }
     }
 
-
+    public void PlayIntroMusic()
+    {
+        PlayMusic(Resources.Load("Music/" + ambientSoundName) as AudioClip);
+    }
 
     public void PlayLevelMusic()
     {
-        //PlayMusic(Resources.Load("Music/" + ambientSoundName) as AudioClip);
         PlayMusic(Resources.Load("Music/" + ambientSoundName2) as AudioClip);
     }
 
@@ -70,8 +72,8 @@ public class AudioManager : MonoBehaviour, IGameManager {
             return;
         }
         StartCoroutine(CrossFadeMusic(clip));
-//        ambientSound.clip = clip;
-//        ambientSound.Play();
+        //music1Source.clip = clip;
+        //music1Source.Play();
     }
 
     private IEnumerator CrossFadeMusic(AudioClip clip)
@@ -103,6 +105,7 @@ public class AudioManager : MonoBehaviour, IGameManager {
 
     public void StopMusic()
     {
+       // music1Source.Stop();
         _activeMusic.Stop();
         _inactiveMusic.Stop();
     }
@@ -115,19 +118,18 @@ public class AudioManager : MonoBehaviour, IGameManager {
     public void Startup()
     {
         Debug.Log("Audio manager starting...");
+        
+
+        music1Source.ignoreListenerVolume = true;
+        music1Source.ignoreListenerPause = true;
+        music2Source.ignoreListenerVolume = true;
+        music2Source.ignoreListenerPause = true;
+
         musicVolume = 1;
         soundVolume = 1;
 
-        ambientSound.ignoreListenerVolume = true;
-        ambientSound.ignoreListenerPause = true;
-        ambientSound2.ignoreListenerVolume = true;
-        ambientSound2.ignoreListenerPause = true;
-
-        _activeMusic = ambientSound;
-        _inactiveMusic = ambientSound2;
-
-        //_activeMusic.Play();
-        //_inactiveMusic.Stop();
+        _activeMusic = music1Source;
+        _inactiveMusic = music2Source;
         
         status = ManagerStatus.Started;
     }
